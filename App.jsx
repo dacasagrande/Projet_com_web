@@ -3,18 +3,21 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
-function AffichageNote({notes,mode}){
+function Header() {
+  return <header className='header'><h1>PlacinNote</h1></header>
+}
+function AffichageNote({ notes, mode }) {
 
-  let listNotes=[];
+  let listNotes = [];
 
-  if (mode=="élève") {
-    for (let i=0; i<notes.length; i++){
+  if (mode == "élève") {
+    for (let i = 0; i < notes.length; i++) {
       console.log(notes[i]["valeur"])
       listNotes.push(`Matière : ${(notes[i]["matiere"] != undefined ? notes[i]["matiere"] : "")} | Enseignée par ${(notes[i]["nomProf"] != undefined ? notes[i]["nomProf"] : "")} | Note :${(notes[i]["valeur"] != undefined ? notes[i]["valeur"] : "")}`)
     }
   }
   else {
-    for (let i=0; i<notes.length; i++){
+    for (let i = 0; i < notes.length; i++) {
       console.log(notes[i]["valeur"])
       listNotes.push(`Note : ${(notes[i]["valeur"] != undefined ? notes[i]["valeur"] : "")} | Classe : ${(notes[i]["nom"] != undefined ? notes[i]["nom"] : "")} | Elève :${(notes[i]["nomEleve"] != undefined ? notes[i]["nomEleve"] : "")} |  Groupe :${(notes[i]["numGroupe"] != undefined ? notes[i]["numGroupe"] : "")}`)
     }
@@ -22,41 +25,44 @@ function AffichageNote({notes,mode}){
 
 
   return (
-    <div style={{display:'flex',flexDirection:'column'}}>
-      {listNotes.map((element)=>{return <p>{element}</p>})}
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+      {listNotes.map((element) => { return <p>{element}</p> })}
     </div>
   )
 }
 
 
-function RechercheNom({setNotes,mode}){
+function RechercheNom({ setNotes, mode }) {
   const [id, setId] = useState("Entrez identifiant")
   const [mdp, setMdp] = useState("Mot de passe")
 
-  async function click(){
+  async function click() {
     let reponse = await fetch(`http://localhost/pronote/index.php?url=${id}&mode=${mode}&mdp=${mdp}`)
-    let donnees = await reponse.json(); 
+    let donnees = await reponse.json();
+    if (donnees[0] == undefined) {
+      alert("Identifiant incorrect !");
+    }
 
     setNotes(donnees)
   }
 
   return (
-    <div>
-      <input type="text" value={id} onChange={e=>setId(e.target.value)}></input>
-      <input type="text" value={mdp} onChange={e=>setMdp(e.target.value)}></input>
-      <button onClick={click}> Voir les notes </button>
+    <div className='rechercherNom'>
+      <input type="text" value={id} onChange={e => setId(e.target.value)}></input>
+      <input type="text" value={mdp} onChange={e => setMdp(e.target.value)}></input>
+      <button className={mode} onClick={click}> Voir les notes </button>
     </div>
   )
 }
 
 
 
-function Mode({setMode,mode,setNotes}){
+function Mode({ setMode, mode, setNotes }) {
 
 
-  function changerMode(){
+  function changerMode() {
     setNotes([{}]);
-    if (mode=="élève") {
+    if (mode == "élève") {
       setMode("prof")
     }
     else {
@@ -66,73 +72,42 @@ function Mode({setMode,mode,setNotes}){
 
   return (
     <div>
-      <button onClick={changerMode}> {mode} </button>
+      <button className={mode} onClick={changerMode}> {mode} </button>
     </div>
   )
 }
 
-// function AjouterNote(){
-//   const [noteAjoute, setNoteAjoute] = useState("X")
-//   const [eleve, setEleve] = useState("X")
-//   async function ajouterNote(){
-//   {
-//     const soumission = async (e) => {
-//       e.preventDefault();
-//       };
-//       try {
-//       const data = { 'note': noteAjoute, 'eleve':eleve}
-//       const reponse = await fetch('http://localhost/pronote/index.php', {
-//       mode:'no-cors',
-//       method: 'POST',
-//       headers: {
-//       'Content-Type': 'application/json',
-//       },
-//       result = await reponse.text(),
-//       body: JSON.stringify(data),
-//       });
-//       console.log('Réponse du serveur :', result);
-//       } catch (erreur) {
-//       console.error('Erreur lors de l\'envoi des données :', erreur);
-//       }
-//       }
-//   }
-//   return (
-//     <div>
-//       <input type="number" value={noteAjoute} onChange={e=>setNoteAjoute(e.target.value)}></input>
-//       <input type="text" value={eleve} onChange={e=>setEleve(e.target.value)}></input>
-//       <button onClick={ajouterNote}> Ajouter</button>
-//     </div>
-//   )
-// }
-function AjouterNote()
-{
+function AjouterNote({ mode }) {
   const [noteAjoute, setNoteAjoute] = useState("0")
   const [eleve, setEleve] = useState("X")
-  async function ajouterNote(){
-  {
-      const data = {'note': noteAjoute, 'eleve':eleve};
+  async function ajouterNote() {
+    {
+      const data = { 'note': noteAjoute, 'eleve': eleve };
       console.log(data);
       try {
         const reponse = await fetch('http://localhost/pronote/ajoutNote.php', {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
         });
         const result = await reponse.text();
         console.log(result);
-        } catch (erreur) {
+      } catch (erreur) {
         console.error('Erreur lors de l\'envoi des données :', erreur);
-        }
-        };
-    }
+      }
+    };
+  }
 
   return (
-    <div>
-      <input type="number" value={noteAjoute} onChange={e=>setNoteAjoute(e.target.value)}></input>
-      <input type="text" value={eleve} onChange={e=>setEleve(e.target.value)}></input>
-      <button onClick={ajouterNote}> Ajouter</button>
+    <div className='formulaire'>
+      <label>Valeur Note :</label>
+      <label>ID Eleve</label>
+      <label> Envoi :</label>
+      <input type="number" value={noteAjoute} onChange={e => setNoteAjoute(e.target.value)}></input>
+      <input type="text" value={eleve} onChange={e => setEleve(e.target.value)}></input>
+      <button className={mode} onClick={ajouterNote}> Ajouter</button>
     </div>
   )
 }
@@ -143,7 +118,7 @@ function App() {
 
   const [notes, setNotes] = useState([{}])
   const [mode, setMode] = useState("élève")
-
+  console.log(notes[0]);
   return (
     <>
       <Header></Header>
@@ -151,7 +126,7 @@ function App() {
         <Mode setMode={setMode} mode={mode} setNotes={setNotes} />
         <RechercheNom setNotes={setNotes} mode={mode} />
         <AffichageNote notes={notes} mode={mode} />
-        {(mode == "prof") && (notes[0]["valeur"] != undefined) ? <AjouterNote /> : <></>}
+        {(mode == "prof") ? <AjouterNote mode={mode} /> : <></>}
       </div>
     </>
   )
