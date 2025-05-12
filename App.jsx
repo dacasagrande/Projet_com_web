@@ -71,39 +71,38 @@ function Mode({setMode,mode}){
   )
 }
 
-// function AjouterNote(){
-//   const [noteAjoute, setNoteAjoute] = useState("X")
-//   const [eleve, setEleve] = useState("X")
-//   async function ajouterNote(){
-//   {
-//     const soumission = async (e) => {
-//       e.preventDefault();
-//       };
-//       try {
-//       const data = { 'note': noteAjoute, 'eleve':eleve}
-//       const reponse = await fetch('http://localhost/pronote/index.php', {
-//       mode:'no-cors',
-//       method: 'POST',
-//       headers: {
-//       'Content-Type': 'application/json',
-//       },
-//       result = await reponse.text(),
-//       body: JSON.stringify(data),
-//       });
-//       console.log('Réponse du serveur :', result);
-//       } catch (erreur) {
-//       console.error('Erreur lors de l\'envoi des données :', erreur);
-//       }
-//       }
-//   }
-//   return (
-//     <div>
-//       <input type="number" value={noteAjoute} onChange={e=>setNoteAjoute(e.target.value)}></input>
-//       <input type="text" value={eleve} onChange={e=>setEleve(e.target.value)}></input>
-//       <button onClick={ajouterNote}> Ajouter</button>
-//     </div>
-//   )
-// }
+function AjouterNote()
+{
+  const [noteAjoute, setNoteAjoute] = useState("0")
+  const [eleve, setEleve] = useState("X")
+  async function ajouterNote(){
+  {
+      const data = {'note': noteAjoute, 'eleve':eleve};
+      console.log(data);
+      try {
+        const reponse = await fetch('http://localhost/pronote/ajoutNote.php', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+        });
+        const result = await reponse.text();
+        console.log(result);
+        } catch (erreur) {
+        console.error('Erreur lors de l\'envoi des données :', erreur);
+        }
+        };
+    }
+
+  return (
+    <div>
+      <input type="number" value={noteAjoute} onChange={e=>setNoteAjoute(e.target.value)}></input>
+      <input type="text" value={eleve} onChange={e=>setEleve(e.target.value)}></input>
+      <button onClick={ajouterNote}> Ajouter</button>
+    </div>
+  )
+}
 
 
 
@@ -117,7 +116,7 @@ function App() {
       <Mode setMode={setMode} mode={mode} />
       <RechercheNom setNotes={setNotes} mode={mode}/>
       <AffichageNote notes={notes} mode={mode}/>
-      {/* <AjouterNote/> */}
+      <AjouterNote/>
     </>
   )
 }
