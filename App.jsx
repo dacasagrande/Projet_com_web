@@ -10,13 +10,13 @@ function AffichageNote({notes,mode}){
   if (mode=="élève") {
     for (let i=0; i<notes.length; i++){
       console.log(notes[i]["valeur"])
-      listNotes.push(`Matière : ${notes[i]["matiere"]} | Enseignée par ${notes[i]["nomProf"]} | Note :${notes[i]["valeur"]}`)
+      listNotes.push(`Matière : ${(notes[i]["matiere"] != undefined ? notes[i]["matiere"] : "")} | Enseignée par ${(notes[i]["nomProf"] != undefined ? notes[i]["nomProf"] : "")} | Note :${(notes[i]["valeur"] != undefined ? notes[i]["valeur"] : "")}`)
     }
   }
   else {
     for (let i=0; i<notes.length; i++){
       console.log(notes[i]["valeur"])
-      listNotes.push(`Note : ${notes[i]["valeur"]} | Classe : ${notes[i]["nom"]} | Elève :${notes[i]["nomEleve"]} |  Groupe :${notes[i]["numGroupe"]}`)
+      listNotes.push(`Note : ${(notes[i]["valeur"] != undefined ? notes[i]["valeur"] : "")} | Classe : ${(notes[i]["nom"] != undefined ? notes[i]["nom"] : "")} | Elève :${(notes[i]["nomEleve"] != undefined ? notes[i]["nomEleve"] : "")} |  Groupe :${(notes[i]["numGroupe"] != undefined ? notes[i]["numGroupe"] : "")}`)
     }
   }
 
@@ -51,11 +51,11 @@ function RechercheNom({setNotes,mode}){
 
 
 
-function Mode({setMode,mode}){
+function Mode({setMode,mode,setNotes}){
 
 
   function changerMode(){
-
+    setNotes([{}]);
     if (mode=="élève") {
       setMode("prof")
     }
@@ -139,11 +139,20 @@ function AjouterNote()
 
 
 
-@@ -117,9 +116,9 @@
-      <Mode setMode={setMode} mode={mode} />
-      <RechercheNom setNotes={setNotes} mode={mode}/>
-      <AffichageNote notes={notes} mode={mode}/>
-      <AjouterNote/>
+function App() {
+
+  const [notes, setNotes] = useState([{}])
+  const [mode, setMode] = useState("élève")
+
+  return (
+    <>
+      <Header></Header>
+      <div className='content'>
+        <Mode setMode={setMode} mode={mode} setNotes={setNotes} />
+        <RechercheNom setNotes={setNotes} mode={mode} />
+        <AffichageNote notes={notes} mode={mode} />
+        {(mode == "prof") && (notes[0]["valeur"] != undefined) ? <AjouterNote /> : <></>}
+      </div>
     </>
   )
 }
