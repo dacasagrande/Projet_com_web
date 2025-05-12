@@ -143,7 +143,6 @@ function AjouterNote()
       <Mode setMode={setMode} mode={mode} />
       <RechercheNom setNotes={setNotes} mode={mode}/>
       <AffichageNote notes={notes} mode={mode}/>
-      {/* <AjouterNote/> */}
       <AjouterNote/>
     </>
   )
