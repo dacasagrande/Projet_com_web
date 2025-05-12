@@ -9,11 +9,11 @@ if (empty($_GET)) {     //connexion sans paramètre
     print_r($_GET);
 }
 elseif ($_GET['mode']=="élève") {
-    $donnees = recupNoteEleve($_GET['url']);
+    $donnees = recupNoteEleve($_GET['url'],$_GET['mdp']);
     envoiJSON($donnees);
 }
 else {
-    $donnees = recupNoteProf($_GET['url']);
+    $donnees = recupNoteProf($_GET['url'],$_GET['mdp']);
     envoiJSON($donnees);
 }
 
