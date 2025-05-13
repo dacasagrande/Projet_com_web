@@ -32,7 +32,7 @@ function AffichageNote({ notes, mode }) {
 }
 
 
-function RechercheNom({ setNotes, mode }) {
+function RechercheNom({ setNotes, mode, setLogin }) {
   const [id, setId] = useState("Entrez identifiant")
   const [mdp, setMdp] = useState("Mot de passe")
 
@@ -41,6 +41,9 @@ function RechercheNom({ setNotes, mode }) {
     let donnees = await reponse.json();
     if (donnees[0] == undefined) {
       alert("Identifiant incorrect !");
+    }
+    else {
+      setLogin(true);
     }
 
     setNotes(donnees)
@@ -57,11 +60,12 @@ function RechercheNom({ setNotes, mode }) {
 
 
 
-function Mode({ setMode, mode, setNotes }) {
+function Mode({ setMode, mode, setNotes, setLogin }) {
 
 
   function changerMode() {
     setNotes([{}]);
+    setLogin(false);
     if (mode == "élève") {
       setMode("prof")
     }
@@ -118,15 +122,16 @@ function App() {
 
   const [notes, setNotes] = useState([{}])
   const [mode, setMode] = useState("élève")
+  const [login, setLogin] = useState(false);
   console.log(notes[0]);
   return (
     <>
       <Header></Header>
       <div className='content'>
-        <Mode setMode={setMode} mode={mode} setNotes={setNotes} />
-        <RechercheNom setNotes={setNotes} mode={mode} />
+        <Mode setMode={setMode} mode={mode} setNotes={setNotes} setLogin={setLogin} />
+        <RechercheNom setNotes={setNotes} mode={mode} setLogin={setLogin} />
         <AffichageNote notes={notes} mode={mode} />
-        {(mode == "prof") ? <AjouterNote mode={mode} /> : <></>}
+        {(mode == "prof") && (login) ? <AjouterNote mode={mode} /> : <></>}
       </div>
     </>
   )
