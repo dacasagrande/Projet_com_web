@@ -37,7 +37,7 @@ function RechercheNom({ setNotes, mode, setLogin }) {
   const [mdp, setMdp] = useState("Mot de passe")
 
   async function click() {
-    let reponse = await fetch(`http://localhost/pronote/index.php?url=${id}&mode=${mode}&mdp=${mdp}`)
+    let reponse = await fetch(`http://dcasagrande.zzz.bordeaux-inp.fr/index.php?url=${id}&mode=${mode}&mdp=${mdp}`)
     let donnees = await reponse.json();
     if (donnees[0] == undefined) {
       alert("Identifiant incorrect !");
@@ -89,7 +89,7 @@ function AjouterNote({ mode }) {
       const data = { 'note': noteAjoute, 'eleve': eleve };
       console.log(data);
       try {
-        const reponse = await fetch('http://localhost/pronote/ajoutNote.php', {
+        const reponse = await fetch('http://dcasagrande.zzz.bordeaux-inp.fr/ajoutNote.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
