@@ -1,9 +1,9 @@
 <?php
 
-$host = 'localhost'; //variables de connexion
+$host = 'zzz.bordeaux-inp.fr'; //variables de connexion
 $dbname = 'pronote';
-$username = 'root';
-$password = '';
+$username = 'dcasagrande';
+$password = '0gigi*ko8DA';
 try {
 $bdd = new PDO('mysql:host='. $host .';dbname='. $dbname .';charset=utf8',
 $username, $password);
